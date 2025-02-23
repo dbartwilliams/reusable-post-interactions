@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import toast from "react-hot-toast";
-import { createComment, deletePost, getPosts, toggleLike } from "@/actions/post.action";
+import { createComment, deletePost, getPosts, toggleLike } from "../actions/post.action";
 import PostActions from './PostActions';
 import PostDisplay from './PostDisplay';
 import CommentSection from './CommentSection';
