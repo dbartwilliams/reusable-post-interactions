@@ -3,16 +3,13 @@
 
 import React from 'react';
 import { formatDistanceToNow } from "date-fns";
-import { Trash2, Heart } from "lucide-react";
-import toast from "react-hot-toast";
-import { deleteComment, toggleCommentLike } from "../actions/comment.action";
+import { Trash2 } from "lucide-react";
 
 interface Comment {
   id: string;
   content: string;
   createdAt: Date;
   author: {
-    id: string; // Added this field
     name: string | null;
     username: string;
     image: string | null;
@@ -22,45 +19,10 @@ interface Comment {
 interface CommentSectionProps {
   comments: Comment[];
   showComments: boolean;
-  currentUserId: string | null;
 }
 
-const CommentSection = ({ comments, showComments, currentUserId }: CommentSectionProps) => {
-  const [isDeletingMap, setIsDeletingMap] = React.useState<Record<string, boolean>>({});
-  const [isLikingMap, setIsLikingMap] = React.useState<Record<string, boolean>>({});
-
+const CommentSection = ({ comments, showComments }: CommentSectionProps) => {
   if (!showComments) return null;
-
-  const handleDeleteComment = async (commentId: string) => {
-    if (isDeletingMap[commentId]) return;
-    
-    try {
-      setIsDeletingMap(prev => ({ ...prev, [commentId]: true }));
-      const result = await deleteComment(commentId);
-      if (result.success) {
-        toast.success("Comment deleted successfully");
-      } else {
-        throw new Error(result.error);
-      }
-    } catch (error) {
-      toast.error("Failed to delete comment");
-    } finally {
-      setIsDeletingMap(prev => ({ ...prev, [commentId]: false }));
-    }
-  };
-
-  const handleLikeComment = async (commentId: string) => {
-    if (isLikingMap[commentId]) return;
-    
-    try {
-      setIsLikingMap(prev => ({ ...prev, [commentId]: true }));
-      await toggleCommentLike(commentId);
-    } catch (error) {
-      toast.error("Failed to like comment");
-    } finally {
-      setIsLikingMap(prev => ({ ...prev, [commentId]: false }));
-    }
-  };
 
   return (
     <div className="space-y-4 bg-gray-800">
@@ -84,27 +46,8 @@ const CommentSection = ({ comments, showComments, currentUserId }: CommentSectio
                 {formatDistanceToNow(new Date(comment.createdAt))} ago
               </span>
             </div>
-            <div className="flex justify-between items-start">
-              <p className="pt-1 pl-2 text-sm break-words">{comment.content}</p>
-              <div className="flex items-center space-x-2">
-                <button 
-                  onClick={() => handleLikeComment(comment.id)}
-                  disabled={isLikingMap[comment.id]}
-                  className="text-muted-foreground hover:text-pink-500"
-                >
-                  <Heart className="size-4" />
-                </button>
-                {currentUserId === comment.author.id && (
-                  <button
-                    onClick={() => handleDeleteComment(comment.id)}
-                    disabled={isDeletingMap[comment.id]}
-                    className="text-muted-foreground hover:text-red-500"
-                  >
-                    <Trash2 className="size-4" />
-                  </button>
-                )}
-              </div>
-            </div>
+            <Trash2 className="size-4 ml-auto mr-3 text-yellow-800 hover:text-yellow-600" />
+            <p className="pt-1 pl-2 text-sm break-words">{comment.content}</p>
           </div>
         </div>
       ))}
@@ -113,3 +56,5 @@ const CommentSection = ({ comments, showComments, currentUserId }: CommentSectio
 };
 
 export default CommentSection;
+
+

@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -44,9 +43,11 @@ const PostDisplay = ({
       <div className="flex-1">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Link href={`/profile/${author.username}`}>
-              <span className="font-semibold text-yellow-500">@{author.username}</span>
-            </Link>
+
+          <Link href={`/profile/${author.username}`}>
+            <span className="font-semibold text-yellow-500">@{author.username}</span>
+          </Link>
+          
             <span className="text-sm text-muted-foreground">•</span>
             <span className="text-sm text-muted-foreground">
               {formatDistanceToNow(new Date(createdAt))} ago
@@ -59,7 +60,7 @@ const PostDisplay = ({
         </div>
 
         <div className="h-auto content-div p-4">
-          <p>{content ?? "No content"}</p>
+        <p>{content ?? "No content"}</p>
         </div>
       </div>
     </div>
