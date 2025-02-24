@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { formatDistanceToNow } from "date-fns";
+import { Trash2 } from "lucide-react";
 
 interface Comment {
   id: string;
@@ -45,6 +46,7 @@ const CommentSection = ({ comments, showComments }: CommentSectionProps) => {
                 {formatDistanceToNow(new Date(comment.createdAt))} ago
               </span>
             </div>
+            <Trash2 className="size-4 ml-auto mr-3 text-yellow-800 hover:text-yellow-600" />
             <p className="pt-1 pl-2 text-sm break-words">{comment.content}</p>
           </div>
         </div>
@@ -54,3 +56,5 @@ const CommentSection = ({ comments, showComments }: CommentSectionProps) => {
 };
 
 export default CommentSection;
+
+

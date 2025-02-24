@@ -1,7 +1,7 @@
-
 "use client";
 
-import React from 'react';
+import { Loader2Icon, Trash2Icon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,35 +12,47 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "./ui/alert-dialog";
-import { Trash2Icon } from "lucide-react";
+} from "@/components/ui/alert-dialog";
 
 interface DeleteAlertDialogProps {
   isDeleting: boolean;
   onDelete: () => Promise<void>;
+  title?: string;
+  description?: string;
 }
 
-export const DeleteAlertDialog = ({
+export function DeleteAlertDialog({
   isDeleting,
   onDelete,
-}: DeleteAlertDialogProps) => {
+  title = "Delete Post",
+  description = "This action cannot be undone.",
+}: DeleteAlertDialogProps) {
   return (
     <AlertDialog>
-      <AlertDialogTrigger disabled={isDeleting}>
-        <Trash2Icon className="w-4 h-4 text-red-500 hover:text-red-600" />
+      <AlertDialogTrigger asChild>
+        <Button
+          variant="ghost"
+          size="lg"
+          className="-mr-2 text-muted-foreground text-yellow-800 hover:yellow-red-700 "
+        >
+          {isDeleting ? (
+            <Loader2Icon className="size-4 animate-spin" />
+          ) : (
+            <Trash2Icon className="size-5" />
+          )}
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your post.
-          </AlertDialogDescription>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             onClick={onDelete}
             className="bg-red-500 hover:bg-red-600"
+            disabled={isDeleting}
           >
             {isDeleting ? "Deleting..." : "Delete"}
           </AlertDialogAction>
@@ -48,4 +60,4 @@ export const DeleteAlertDialog = ({
       </AlertDialogContent>
     </AlertDialog>
   );
-};
+}
