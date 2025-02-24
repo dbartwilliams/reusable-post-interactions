@@ -1,5 +1,7 @@
+
 "use server";
 
+import { PrismaClient } from "@prisma/client";
 import prisma from "../lib/prisma";
 import { getDbUserId } from "./user.action";
 import { revalidatePath } from "next/cache";
@@ -108,26 +110,25 @@ export async function toggleLike(postId: string) {
         },
       });
     } else {
-      await prisma.$transaction([
-        prisma.like.create({
+      await prisma.$transaction(async (tx: PrismaClient) => {
+        await tx.like.create({
           data: {
             userId,
             postId,
           },
-        }),
-        ...(post.authorId !== userId
-          ? [
-              prisma.notification.create({
-                data: {
-                  type: "LIKE",
-                  userId: post.authorId,
-                  creatorId: userId,
-                  postId,
-                },
-              }),
-            ]
-          : []),
-      ]);
+        });
+
+        if (post.authorId !== userId) {
+          await tx.notification.create({
+            data: {
+              type: "LIKE",
+              userId: post.authorId,
+              creatorId: userId,
+              postId,
+            },
+          });
+        }
+      });
     }
 
     revalidatePath("/");
@@ -152,7 +153,7 @@ export async function createComment(postId: string, content: string) {
 
     if (!post) throw new Error("Post not found");
 
-    const [comment] = await prisma.$transaction(async (tx) => {
+    const [comment] = await prisma.$transaction(async (tx: PrismaClient) => {
       const newComment = await tx.comment.create({
         data: {
           content,

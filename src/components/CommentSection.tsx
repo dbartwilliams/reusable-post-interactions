@@ -12,6 +12,7 @@ interface Comment {
   content: string;
   createdAt: Date;
   author: {
+    id: string; // Added this field
     name: string | null;
     username: string;
     image: string | null;
