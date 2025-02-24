@@ -109,6 +109,7 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
           <CommentSection
             comments={post.comments}
             showComments={showComments}
+            currentUserId={dbUserId}
           />
           <NewComment
             user={user}
