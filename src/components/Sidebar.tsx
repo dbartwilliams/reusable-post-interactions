@@ -90,7 +90,7 @@ async function Sidebar() {
 
 
         {/* More user atttriutes */}
-        <div className="w-full space-y-2 text-sm px-4 mb-4">
+        <div className="w-full flex justify-center  text-sm space-x-2 mb-4">
             <div className="flex items-center text-muted-foreground">
               <MapPinIcon className="w-4 h-4 mr-2" />
               {user.location || "No location"}

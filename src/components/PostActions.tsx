@@ -21,7 +21,7 @@ const PostActions = ({
   onToggleComments,
 }: PostActionsProps) => {
   return (
-    <div className="flex items-center justify-between px-20 py-2 bg-gray-700 shadow-lg">
+    <div className="flex items-center gap-4 px-20 py-2">
       {/* Like Button */}
       <button
         onClick={onLike}
@@ -31,24 +31,25 @@ const PostActions = ({
         }`}
       >
         <HeartIcon 
-          className={`w-5 h-5 ${hasLiked ? "fill-current text-pink-500" : ""}`}
-        />
-        <span>{likes} {likes === 1 ? 'Like' : 'Likes'}</span>
+          className={`w-4 h-4 ${hasLiked ? "fill-current text-pink-500" : ""}`}/>
+           <span>{likes}</span>
+        {/* <span>{likes} {likes === 1 ? 'Like' : 'Likes'}</span> */}
       </button>
 
       {/* Share Button */}
       <button className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-yellow-500" disabled>
-        <Share2Icon className="w-5 h-5"/> 
-        <span>Share</span>
-      </button>
+        <Share2Icon className="w-4 h-4"/> 
+        {/* <span>Share</span> */}
+      </button>0 
 
       {/* Comments Button */}
       <button
         onClick={onToggleComments}
         className="flex items-center gap-2 text-muted-foreground hover:text-green-500"
       >
-        <MessageCircleIcon className="w-5 h-5" />
-        <span>{comments} {comments === 1 ? 'Comment' : 'Comments'}</span>
+        <MessageCircleIcon className="w-4 h-4" />
+           <span>{comments}</span>
+        {/* <span>{comments} {comments === 1 ? 'Comment' : 'Comments'}</span> */}
       </button>
     </div>
   );

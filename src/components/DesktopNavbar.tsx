@@ -21,12 +21,16 @@ async function DesktopNavbar() {
 
       {user ? (
         <>
-          <Button variant="ghost" className="flex items-center gap-2" asChild>
-            <Link href="/notifications">
-              <BellIcon className="w-4 h-4" />
-              <span className="hidden lg:inline">Notifications</span>
-            </Link>
-          </Button>
+              <Button variant="ghost" className="flex items-center gap-2" asChild>
+                <Link href="/notifications" className="relative">
+                  <BellIcon className="w-4 h-4" />
+                  <span className="hidden lg:inline">Notifications</span>
+                  <div className="absolute top-0 right-0 inline-block w-4 h-4 bg-red-500 text-white text-xs font-semibold flex p-4 rounded-full items-center justify-center">
+                    {/* Replace `notificationCount` with the actual variable or state holding the count */}
+                    <span>20+</span>
+                  </div>
+                </Link>
+              </Button>
           <Button variant="ghost" className="flex items-center gap-2" asChild>
             <Link
               href={`/profile/${

@@ -83,7 +83,7 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
         <div className="h-auto mt-4 image-div">
           <img
             src={post.image}
-            alt="Post content"
+            alt="Post_Content_Image"
             className="object-cover w-full h-auto shadow-xl"
           />
         </div>
