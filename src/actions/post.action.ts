@@ -1,5 +1,6 @@
 "use server";
 
+import { PrismaClient } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { getDbUserId } from "./user.action";
 import { revalidatePath } from "next/cache";
@@ -18,7 +19,7 @@ export async function createPost(content: string, image: string) {
       },
     });
 
-    revalidatePath("/"); // purge the cache for the home page
+    revalidatePath("/");
     return { success: true, post };
   } catch (error) {
     console.error("Failed to create post:", error);
@@ -82,7 +83,6 @@ export async function toggleLike(postId: string) {
     const userId = await getDbUserId();
     if (!userId) return;
 
-    // check if like exists
     const existingLike = await prisma.like.findUnique({
       where: {
         userId_postId: {
@@ -100,7 +100,6 @@ export async function toggleLike(postId: string) {
     if (!post) throw new Error("Post not found");
 
     if (existingLike) {
-      // unlike
       await prisma.like.delete({
         where: {
           userId_postId: {
@@ -110,27 +109,25 @@ export async function toggleLike(postId: string) {
         },
       });
     } else {
-      // like and create notification (only if liking someone else's post)
-      await prisma.$transaction([
-        prisma.like.create({
+      await prisma.$transaction(async (tx: PrismaClient) => {
+        await tx.like.create({
           data: {
             userId,
             postId,
           },
-        }),
-        ...(post.authorId !== userId
-          ? [
-              prisma.notification.create({
-                data: {
-                  type: "LIKE",
-                  userId: post.authorId, // recipient (post author)
-                  creatorId: userId, // person who liked
-                  postId,
-                },
-              }),
-            ]
-          : []),
-      ]);
+        });
+
+        if (post.authorId !== userId) {
+          await tx.notification.create({
+            data: {
+              type: "LIKE",
+              userId: post.authorId,
+              creatorId: userId,
+              postId,
+            },
+          });
+        }
+      });
     }
 
     revalidatePath("/");
@@ -155,9 +152,7 @@ export async function createComment(postId: string, content: string) {
 
     if (!post) throw new Error("Post not found");
 
-    // Create comment and notification in a transaction
-    const [comment] = await prisma.$transaction(async (tx) => {
-      // Create comment first
+    const [comment] = await prisma.$transaction(async (tx: PrismaClient) => {
       const newComment = await tx.comment.create({
         data: {
           content,
@@ -166,7 +161,6 @@ export async function createComment(postId: string, content: string) {
         },
       });
 
-      // Create notification if commenting on someone else's post
       if (post.authorId !== userId) {
         await tx.notification.create({
           data: {
@@ -182,7 +176,7 @@ export async function createComment(postId: string, content: string) {
       return [newComment];
     });
 
-    revalidatePath(`/`);
+    revalidatePath("/");
     return { success: true, comment };
   } catch (error) {
     console.error("Failed to create comment:", error);
