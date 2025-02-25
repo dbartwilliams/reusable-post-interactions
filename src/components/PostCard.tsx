@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -22,8 +23,7 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
   const [isCommenting, setIsCommenting] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  // const [hasLiked, setHasLiked] = useState(post.likes.some((like) => like.userId === dbUserId));
-  const [hasLiked, setHasLiked] = useState(post.likes.some((like : Like) => like.userId === dbUserId));
+  const [hasLiked, setHasLiked] = useState(post.likes.some((like: Like) => like.userId === dbUserId));
   const [optimisticLikes, setOptmisticLikes] = useState(post._count.likes);
   const [showComments, setShowComments] = useState(false);
 
@@ -109,6 +109,7 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
           <CommentSection
             comments={post.comments}
             showComments={showComments}
+            currentUserId={dbUserId}
           />
           <NewComment
             user={user}

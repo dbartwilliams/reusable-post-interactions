@@ -34,15 +34,19 @@ interface CommentSectionProps {
 const CommentSection = ({ comments, showComments, currentUserId }: CommentSectionProps) => {
   const [isDeletingMap, setIsDeletingMap] = useState<Record<string, boolean>>({});
   const [isLikingMap, setIsLikingMap] = useState<Record<string, boolean>>({});
-  const [optimisticLikes, setOptimisticLikes] = useState<Record<string, number>>(
-    comments.reduce((acc, comment) => ({ ...acc, [comment.id]: comment._count.likes }), {})
-  );
-  const [hasLikedMap, setHasLikedMap] = useState<Record<string, boolean>>(
-    comments.reduce((acc, comment) => ({
+  const [optimisticLikes, setOptimisticLikes] = useState<Record<string, number>>(() => {
+    return comments.reduce((acc, comment) => ({
       ...acc,
-      [comment.id]: comment.likes.some(like => like.userId === currentUserId)
-    }), {})
-  );
+      [comment.id]: comment._count?.likes ?? 0
+    }), {});
+  });
+
+  const [hasLikedMap, setHasLikedMap] = useState<Record<string, boolean>>(() => {
+    return comments.reduce((acc, comment) => ({
+      ...acc,
+      [comment.id]: comment.likes?.some(like => like.userId === currentUserId) ?? false
+    }), {});
+  });
 
   if (!showComments) return null;
 
