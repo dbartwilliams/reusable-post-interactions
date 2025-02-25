@@ -6,13 +6,14 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatDistanceToNow } from "date-fns";
-import { HeartIcon, MessageCircleIcon, UserPlusIcon } from "lucide-react";
+import { HeartIcon, MessageCircleIcon, UserPlusIcon, Trash2Icon } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 type Notifications = Awaited<ReturnType<typeof getNotifications>>;
 type Notification = Notifications[number];
+
 
 const getNotificationIcon = (type: string) => {
   switch (type) {
@@ -26,6 +27,7 @@ const getNotificationIcon = (type: string) => {
       return null;
   }
 };
+
 
 function NotificationsPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -51,6 +53,7 @@ function NotificationsPage() {
   }, []);
 
   if (isLoading) return <NotificationsSkeleton />;
+
 
   return (
     <div className="space-y-4 bg-inherit">
@@ -91,6 +94,8 @@ function NotificationsPage() {
                           ? "liked your post"
                           : "commented on your post"}
                       </span>
+
+                      <span className="ml-auto"><Trash2Icon className="w-5 h-5 text-gray-600"/></span>
                     </div>
 
                     {notification.post &&

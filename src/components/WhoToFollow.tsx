@@ -3,14 +3,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import FollowButton from "./FollowButton";
+import { currentUser } from "@clerk/nextjs/server";
+import { getUserByClerkId } from "@/actions/user.action";
 
 async function WhoToFollow() {
-  const users = await getRandomUsers();
 
+    const authUser = await currentUser();
+    if (!authUser) return <UnAuthenticatedSidebar />;
+  
+    const user = await getUserByClerkId(authUser.id);
+    if (!user) return null;
+
+
+  const users = await getRandomUsers();
   if (users.length === 0) return null;
 
   return (
-    <Card>
+    <Card className="dark:bg-gray-900">
       <CardHeader>
         <CardTitle>Who to Follow</CardTitle>
       </CardHeader>
@@ -44,3 +53,13 @@ async function WhoToFollow() {
   );
 }
 export default WhoToFollow;
+
+
+
+const UnAuthenticatedSidebar = () => (
+  <div className="sticky top-20">
+      You are not Authenticated
+</div>
+
+
+);

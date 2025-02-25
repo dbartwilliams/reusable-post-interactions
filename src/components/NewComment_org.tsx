@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { SignInButton } from "@clerk/nextjs";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
-import { LogInIcon, SendIcon,  } from "lucide-react";
+import { LogInIcon, SendIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -32,7 +32,7 @@ const NewComment = ({
 
   if (!user) {
     return (
-      <div className="flex justify-center p-4 border rounded-lg bg-muted/50 ">
+      <div className="flex justify-center p-4 border rounded-lg bg-muted/50">
         <SignInButton mode="modal">
           <button className="mt-4 inline-block bg-green-700 hover:bg-green-600 text-gray-300 font-semibold py-2 px-4 rounded">
             <LogInIcon className="size-4" />
@@ -45,14 +45,12 @@ const NewComment = ({
 
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-      <DialogTrigger asChild className=''>
-      <button 
-        className="flex py-2 w-full text-center mx-auto justify-center items-center hover:text-yellow-600">
-        <SendIcon className="size-4 mr-2" />
-          Add New Comment
-        </button>
+      <DialogTrigger asChild>
+        {/* <Button variant="outline" className="py-2">
+          Add a Comment
+        </Button> */}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>New Comment</DialogTitle>
         </DialogHeader>
@@ -66,10 +64,11 @@ const NewComment = ({
           </div>
           <div className="flex-1">
             <Textarea
-              placeholder="Write something nice..."
+              placeholder="Write a comment..."
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              className="min-h-[120px] resize-none"
+              className="min-h-[80px] resize-none"
+              autoFocus // Auto-focus the textarea when the modal opens
             />
             <div className="flex justify-end mt-2">
               <Button

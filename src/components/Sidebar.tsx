@@ -20,7 +20,7 @@ async function Sidebar() {
   return (
     <div className="sticky top-20">
       <div className="relative flex flex-col items-center overflow-hidden text-center 
-      rounded-lg dark:bg-gray-900 dark:border-none">
+      rounded-lg dark:bg-[#2f302a] dark:border-none">
 
          {/* Banner Image */}
          <div className="relative w-full h-14">
@@ -117,11 +117,6 @@ export default Sidebar
 
 const UnAuthenticatedSidebar = () => (
   <div className="sticky top-20">
-
-
-
-
-
 
 <div className="relative flex flex-col items-center overflow-hidden text-center 
       rounded-lg dark:bg-gray-900 dark:border-none">

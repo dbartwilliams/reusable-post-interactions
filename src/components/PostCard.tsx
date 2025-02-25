@@ -105,7 +105,7 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
       />
 
       {showComments && (
-        <div className="pt-4 space-y-4 border-t">
+        <div className="">
           <CommentSection
             comments={post.comments}
             showComments={showComments}
