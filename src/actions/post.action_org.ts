@@ -1,3 +1,4 @@
+
 "use server";
 
 import { PrismaClient } from "@prisma/client";
@@ -109,8 +110,8 @@ export async function toggleLike(postId: string) {
         },
       });
     } else {
-      await prisma.$transaction(async (tx: PrismaClient) => {
-        await tx.like.create({
+      await prisma.$transaction(async (prismaClient: PrismaClient) => {
+        await prismaClient.like.create({
           data: {
             userId,
             postId,
@@ -118,7 +119,7 @@ export async function toggleLike(postId: string) {
         });
 
         if (post.authorId !== userId) {
-          await tx.notification.create({
+          await prismaClient.notification.create({
             data: {
               type: "LIKE",
               userId: post.authorId,

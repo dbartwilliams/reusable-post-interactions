@@ -1,6 +1,6 @@
 
 import { getNotifications, markNotificationsAsRead } from "@/actions/notification.action";
-import { toast } from "./ui/use-toast";
+import { Toast, ToastTitle, ToastDescription } from "./toast";
 
 interface Notification {
   id: string;
@@ -23,10 +23,14 @@ export async function NotifyUser() {
     
     if (!unreadNotifications.length) return;
     
-    toast({
-      title: "New Notifications",
-      description: `You have ${unreadNotifications.length} unread notifications`,
-    });
+    return (
+      <Toast>
+        <ToastTitle>New Notifications</ToastTitle>
+        <ToastDescription>
+          You have {unreadNotifications.length} unread notifications
+        </ToastDescription>
+      </Toast>
+    );
     
     const unreadIds = unreadNotifications.map((n: Notification) => n.id);
     await markNotificationsAsRead(unreadIds);
